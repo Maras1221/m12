@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com"> 
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+    <link href="https://fonts.googleapis.com/css2?family=Rubik+Mono+One&display=swap" rel="stylesheet">
+    <title>Орел или Решка</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #000000; /* Цвет фона шапки */
+            background-image: url('fon.gif');;
+            font-family: "Rubik Mono One", serif;
+            font-weight: 400;
+            font-style: normal;
+            position: relative; /* Для позиционирования загрузчика */
+            margin: 0; /* Убираем отступы по умолчанию */
+        }
+        header {
+            height: 1cm;
+            width: 100%;
+            background-color: #433043; /* Цвет фона шапки */
+            color: white; /* Цвет текста */
+            text-align: center; /* Центрируем текст */
+            position: absolute; /* Позиционируем шапку */
+            top: 0; /* Прикрепляем к верхней части */
+            z-index: 1; /* Делаем шапку над контентом */
+            display: flex; /* Используем flexbox для выравнивания */
+            align-items: center; /* Центрируем по вертикали */
+            justify-content: center; /* Центрируем по горизонтали */
+            box-shadow: 0 5px 5px #433043;
+        }
+        .back-button {
+            position: absolute; /* Позиционируем кнопку */
+            left: 0.53cm; /* Отступ слева (20px = 0.53cm) */
+            border: none; /* Убираем рамку */
+            cursor: pointer; /* Указатель при наведении */
+            text-decoration: none;
+        }
+        button {
+            padding: 0.26cm 0.53cm; /* Отступы кнопки (10px 20px = 0.26cm 0.53cm) */
+            font-size: 0.68cm; /* Размер шрифта (16px = 0.68cm) */
+            cursor: pointer;
+            margin-top: 0.53cm; /* Отступ сверху (20px = 0.53cm) */
+        }
+        #result {
+            font-size: 0.95cm; /* Размер шрифта (24px = 0.95cm) */
+            margin-bottom: 0.53cm; /* Отступ снизу (20px = 0.53cm) */
+            font-family: "Rubik Mono One", serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+        #image {
+            width: 2.64cm; /* Ширина изображения (100px = 2.64cm) */
+            height: auto;
+            margin-bottom: 0.53cm; /* Отступ снизу (20px = 0.53cm) */
+            display: none;
+        }
+        /* Контейнер для результата и изображения */
+        .result-container {
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 1.53cm; /* Отступ снизу для кнопки (20px = 0.53cm) */
+            margin-top: -1.58cm; /* Отступ сверху для контейнера (60px = 1.58cm) */
+        }
+        /* Анимация змейки загрузки */
+        .loader {
+            border: 0.21cm solid #f3f3f3; /* Ширина границы (8px = 0.21cm) */
+            border-top: 0.21cm solid #3498db; /* Ширина верхней границы (8px = 0.21cm) */
+            border-radius: 50%;
+            width: 1.32cm; /* Ширина загрузчика (50px = 1.32 cm) */
+            height: 1.32cm; /* Высота загрузчика (50px = 1.32cm) */
+            animation: spin 0.5s linear infinite; /* Ускоренная анимация */
+            display: none; /* Скрыть по умолчанию */
+            margin-bottom: 0.53cm; /* Отступ снизу для загрузчика (20px = 0.53cm) */
+        }
+        .generateButton{
+            font-family: "Rubik Mono One", serif;
+            font-weight: 400;
+            font-style: normal;
+            color: #000000;
+            font-size: 0.5cm;
+            border-radius: 1cm;
+            background-color: #ffffff;
+            border: 1mm solid #a9a9a9;
+            text-shadow: 0 0px 3px rgba(0, 0, 0, 0.678);
+            box-shadow: 0 0px 20px rgba(255, 255, 255, 0.678); ;
+            margin-top: -1cm;
+        }
+        .NAST{
+            font-size: 0.6cm;
+            text-shadow: 0 0px 3px #ffffff;
+        }
+        .image{
+            box-shadow: 0 0px 50px rgba(255, 208, 0, 0.712);
+            border-radius: 100000cm;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* Медиа-запросы для адаптации под мобильные устройства */
+        @media (max-width: 600px) {
+            header {
+                padding: 0.2cm 0; /* Уменьшаем отступы для мобильных */
+                align-items: center;
+            }
+            .back-button {
+                left: 0.4cm; /* Уменьшаем отступ слева */
+                padding: 0.1cm 0.15cm; /* Уменьшаем отступы кнопки */
+                font-size: 0.3cm;
+            }
+            button {
+                padding: 0.2cm 0.4cm; /* Уменьшаем отступы кнопки */
+                font-size: 0.6cm; /* Уменьшаем размер шрифта */
+                margin-top: 0.4cm; /* Уменьшаем отступ сверху */
+            }
+            #result {
+                font-size: 0.8cm; /* Уменьшаем размер шрифта */
+                margin-bottom: 0.4cm; /* Уменьшаем отступ снизу */
+            }
+            #image {
+                width: 6cm; /* Уменьшаем ширину изображения */
+            }
+            .loader {
+                width: 1cm; /* Уменьшаем ширину загрузчика */
+                height: 1cm; /* Уменьшаем высоту загрузчика */
+            }
+            h1{
+                font-size: 0.5cm;
+            }
+        }
+        .tab_111 {
+            transform: scaleX(0.99);
+            position: fixed;
+            bottom: 0;
+            z-index: 10;
+            width: 95%;
+            display: flex;
+            justify-content: center;
+            background-color: #000000;
+            padding: 5px 0;
+            border: 0.5mm solid white;
+            border-radius: 25px;
+            margin: 10px;
+            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.541);
+        }
+
+        .tab_111 a {
+            background-color: inherit;
+            flex: 1 0 auto;
+            margin: 12px 10px;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 3px 10px;
+            transition: 0.3s;
+            color: #ffffff;
+            text-align: center;
+            border-radius: 15px;
+            font-size: 16px;
+            font-family: 'Intro', Arial, sans-serif;
+            background-color: #000000;
+            border: 0.5mm solid white;
+            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.541);
+        }
+
+
+        .tab_111 a:active {
+            background-color: #000000;
+            transform: scale(1.05);
+            border: 0.5mm solid white;
+            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.541);
+        }
+
+        .tabcontent_111 {
+            display: none;
+            overflow: auto;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            border-top: none;
+            overflow: auto;
+            flex-grow: 1;
+            margin-top: 0px;
+            margin-bottom: 70px;
+        }
+
+        .tabcontent_111.active {
+            display: flex;
+            opacity: 1;
+            visibility: visible;
+            z-index: 1; /* повысить z-index для активного контента */
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+
+        body {
+            background: url('fon.gif');
+            background-size: cover;
+            color: #fff;
+            font-family: 'Intro', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            padding-top: 60px;
+            padding-bottom: 50px;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            scroll-behavior: smooth;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            z-index: -100;
+            width: 100%;
+            padding: 10px 20px;
+            background-color: #ffffff;
+            color: #e70303;
+            display: flex;
+            align-items: center;
+            font-family: 'Intro', Arial, sans-serif;
+            box-sizing: border-box;
+            font-size: 24px;
+        }
+
+        header img {
+            height: 30px;
+            width: 30px;
+            margin-right: 10px;
+            border-radius: 50%;
+        }
+        .games-icon_111 img {
+            width: 38px;
+            height: 38px;
+        }
+
+        .contact-icon_111 img {
+            width: 28px;
+            height: 28px;
+            margin-top: 4px;
+        }
+
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+  </style>
+</head>
+<body>
+<div class="tab_111">
+    <a href="index.html"  class="tablinks_111 games-icon_111 active_111" data-tab="Games" onclick="openTab(event, &#39;Games&#39;, this)">
+        <img src="game.png" alt="Игры">
+    </a>
+    <a href="index.html"  class="tablinks_111 contact-icon_111" data-tab="Contact" onclick="openTab(event, &#39;Contact&#39;, this)">
+        <img src="money.png" alt="Контакты">
+    </a>
+</div>
+    <div class="result-container">
+        <div class="loader" id="loader"></div>
+        <img class="image" id="image" src="" alt="Результат">
+        <div class="result" id="result"></div>
+    </div>
+    <button class="generateButton" id="generateButton">ПОЛУЧИТЬ СИГНАЛ</button>
+
+    <script>
+        document.getElementById('generateButton').addEventListener('click', function() {
+            const loader = document.getElementById('loader');
+            const imageElement = document.getElementById('image');
+            const resultTextElement = document.getElementById('result');
+
+            // Показать анимацию загрузки и скрыть текст и изображение
+            loader.style.display = 'block'; // Показать анимацию загрузки
+            imageElement.style.display = 'none'; // Скрыть изображение
+            resultTextElement.style.display = 'none'; // Скрыть текст результата
+
+            // Генерация случайного числа для выбора "Орел" или "Решка"
+            setTimeout(() => {
+                const random = Math.random();
+                const resultText = random < 0.5 ? "EAGLE" : "TAILS";
+
+                // Установка изображения в зависимости от результата
+                if (resultText === "EAGLE") {
+                    imageElement.src = "evro.png"; // Путь к изображению "Орел"
+                } else {
+                    imageElement.src = "dollar.png"; // Путь к изображению "Решка"
+                }
+
+                // Отображение результата и изображения
+                resultTextElement.innerText = resultText;
+                imageElement.style.display = 'block'; // Показать изображение
+                loader.style.display = 'none'; // Скрыть анимацию загрузки
+                resultTextElement.style.display = 'block'; // Показать текст результата
+            }, 1000); // Задержка 1 секунда для имитации загрузки
+        });
+    </script>
+
+</body>
+</html>
